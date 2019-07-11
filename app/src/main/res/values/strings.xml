@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Academic Companion</string>
+    <string name="title_activity_dashboard">Dashboard</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Academic Companion</string>
+    <string name="nav_header_subtitle">for MCA Students</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Dashboard</string>
+    <string name="menu_gallery">Notes</string>
+    <string name="menu_slideshow">Past Papers</string>
+    <string name="menu_tools">Downloads</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_send">FeedBack</string>
+</resources>
