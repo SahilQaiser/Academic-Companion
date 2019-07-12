@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
     EditText etUsername, etPassword;
+    private static final String TAG = "MainActivity";
     Button btnLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

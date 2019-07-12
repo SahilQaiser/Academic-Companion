@@ -2,8 +2,11 @@ package com.sq.mcaguide;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,10 +18,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    public String[] subjects;
-    public String[] sems;
+    int time=0;
+    private static final String TAG="Dashboard";
+    FirebaseFirestore db;
+    ArrayList<String> subjectList;
+    ArrayList<String> semList;
+    ArrayList<String> urlList;
+    Intent i;
+    public static String[] sList,subList,uList;
+    Map<String, Object> subs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,8 +49,18 @@ public class Dashboard extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(Dashboard.this,AddSubs.class);
-                startActivity(i);
+                i = new Intent(Dashboard.this,AddSubs.class);
+                Handler handler = new Handler();
+                if(time==0)
+                {
+                    handler.postDelayed(new Runnable() {
+                        public void run() {
+                            time++;
+                            startActivity(i);
+                        }
+                    }, 2000);
+                } else
+                    startActivity(i);
             }
         });
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -40,6 +70,66 @@ public class Dashboard extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
         navigationView.setNavigationItemSelectedListener(this);
+
+        //FireCloud
+        db = FirebaseFirestore.getInstance();
+        subjectList=new ArrayList<>();
+        semList=new ArrayList<>();
+        urlList=new ArrayList<>();
+        subs=new HashMap<>();
+        String result = readFromFireStore();
+        Log.d(TAG,result);
+
+
+
+    }
+
+    private String readFromFireStore() {
+
+
+        db.collection("subjects")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int i;
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                //Log.d(TAG, document.getId() + " => " + document.getData());
+                                subs = document.getData();
+                                i=0;
+                                for(Map.Entry sub:subs.entrySet())
+                                {
+                                    if(i==0)
+                                    {
+                                        subjectList.add(sub.getValue().toString());
+                                        i++;
+                                    }
+                                    else if(i==1)
+                                    {
+                                        semList.add(sub.getValue().toString());
+                                        i++;
+                                    }
+                                    else if(i==2)
+                                    {
+                                        urlList.add(sub.getValue().toString());
+                                        i++;
+                                    }
+                                    Log.d(TAG," Working fine inside loop");
+                                }
+                                Log.d(TAG," Working fine outside loop");
+                            }
+                            Log.d(TAG," Working fine, ArrayList to Array Done");
+                            subList = subjectList.toArray(new String[subjectList.size()]);
+                            sList = semList.toArray(new String[semList.size()]);
+                            uList = urlList.toArray(new String[urlList.size()]);
+
+                        } else {
+                            Log.w(TAG, "Error getting documents.", task.getException());
+                        }
+                    }
+                });
+        return "SUCCESS";
     }
 
     @Override
