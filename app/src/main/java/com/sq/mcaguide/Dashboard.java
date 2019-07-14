@@ -37,7 +37,9 @@ public class Dashboard extends AppCompatActivity
     ArrayList<String> semList;
     ArrayList<String> urlList;
     Intent i;
-    public static String[] sList,subList,uList;
+    public static String[] sList = {"5th Sem","3rd Sem","5th Sem","4th Sem","4th Sem","2nd Sem","3rd Sem"};
+    public static String[] subList= {"Machine Learning","Core Java","Python","Artificial Intelligence","Advanced java","Computer Networks","Theory Of Computing"};
+    public static String[] uList={"NA","NA","NA","NA","NA","NA","NA"};
     Map<String, Object> subs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +60,7 @@ public class Dashboard extends AppCompatActivity
                             time++;
                             startActivity(i);
                         }
-                    }, 2000);
+                    }, 1000);
                 } else
                     startActivity(i);
             }
