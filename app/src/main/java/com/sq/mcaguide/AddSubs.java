@@ -26,14 +26,12 @@ import java.util.Map;
 
 public class AddSubs extends AppCompatActivity {
     RecyclerView rview;
-    Map<String, Object> subs;
+
     FirebaseFirestore db;
     private static final String TAG = "AddSubs";
-   SubAdapter adapter;
-    ArrayList<String> subjectList;
-    String[] subList= {"Machine Learning","Core Java","Python","Artificial Intelligence","Advanced java","Computer Networks","Theory Of Computing"};
-    ArrayList<String> semList;
-    String[] sList = {"5th Sem","3rd Sem","5th Sem","4th Sem","4th Sem","2nd Sem","3rd Sem"};
+    SubAdapter adapter;
+    String[] subList;//= {"Machine Learning","Core Java","Python","Artificial Intelligence","Advanced java","Computer Networks","Theory Of Computing"};
+    String[] sList;// = {"5th Sem","3rd Sem","5th Sem","4th Sem","4th Sem","2nd Sem","3rd Sem"};
     String[] uList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +41,15 @@ public class AddSubs extends AppCompatActivity {
         rview.setHasFixedSize(true);
         db = FirebaseFirestore.getInstance();
         Query mquery;
-        subjectList=new ArrayList<>();
-        semList=new ArrayList<>();
-        subs=new HashMap<>();
+
         rview.setLayoutManager(new LinearLayoutManager(this));
-        //FireStore Start
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                // yourMethod();
-            }
-        }, 2000);
+//      FireStore Start
+//        Handler handler = new Handler();
+//        handler.postDelayed(new Runnable() {
+//            public void run() {
+//                // yourMethod();
+//            }
+//        }, 2000);
         subList=Dashboard.subList;
         sList=Dashboard.sList;
         uList=Dashboard.uList;

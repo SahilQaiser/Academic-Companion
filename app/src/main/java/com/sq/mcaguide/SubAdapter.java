@@ -1,6 +1,7 @@
 package com.sq.mcaguide;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
 
     private StorageReference mStorageRef;
     private Context mContext;
+    Intent addSub;
     private String[] mList;
     private String[] mSem;
     private String[] mUrl;
@@ -42,7 +44,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
         this.mSem=sem;
         this.mUrl=uList;
         this.mContext=context;
-        mStorageRef = FirebaseStorage.getInstance().getReference();
+        //mStorageRef = FirebaseStorage.getInstance().getReference();
     }
     @NonNull
     @Override
@@ -52,16 +54,17 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        String subject = mList[i];
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
+        final String subject = mList[i];
+
         String sem = mSem[i]+" Semester";
         url = mUrl[i];
         viewHolder.textView.setText(subject);
         viewHolder.textView2.setText(sem);
-        viewHolder.btn_dl.setOnClickListener(new View.OnClickListener() {
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("URL",url);
+               Toast.makeText(v.getContext(),"Added "+subject,Toast.LENGTH_LONG).show();
             }
         });
     }
@@ -73,12 +76,12 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView textView,textView2;
-        public Button btn_dl;
+        //public Button btn_dl;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             textView =  itemView.findViewById(R.id.tvSub);
             textView2 = itemView.findViewById(R.id.tvSem);
-            btn_dl = itemView.findViewById(R.id.btnDL);
+            //btn_dl = itemView.findViewById(R.id.btnDL);
         }
     }
 }

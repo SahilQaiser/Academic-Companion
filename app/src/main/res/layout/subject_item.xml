@@ -30,15 +30,5 @@ android:layout_height="wrap_content"
             android:fontFamily="monospace"
             android:textAlignment="center" />
 
-        <Button
-            android:id="@+id/btnDL"
-            style="@style/Widget.Design.FloatingActionButton"
-            android:layout_width="55dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/ic_add_black_24dp"
-            android:fontFamily="monospace"
-            android:textAlignment="center" />
     </LinearLayout>
 </android.support.v7.widget.CardView>
