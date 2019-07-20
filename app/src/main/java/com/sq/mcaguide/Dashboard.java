@@ -1,11 +1,15 @@
 package com.sq.mcaguide;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.support.v4.view.GravityCompat;
@@ -31,6 +35,7 @@ import java.util.Map;
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     int time=0;
+    public static SharedPreferences sharedPreferences;
     private static final String TAG="Dashboard";
     FirebaseFirestore db;
     ArrayList<String> subjectList;
@@ -41,12 +46,19 @@ public class Dashboard extends AppCompatActivity
     public static String[] subList= {"Machine Learning","Core Java","Python","Artificial Intelligence","Advanced java","Computer Networks","Theory Of Computing"};
     public static String[] uList={"NA","NA","NA","NA","NA","NA","NA"};
     Map<String, Object> subs;
+
+    private RecyclerView mRecyclerView;
+    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.LayoutManager mLayoutManager;
+    Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        context=Dashboard.this;
         FloatingActionButton fab = findViewById(R.id.fabAdd);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,8 +93,41 @@ public class Dashboard extends AppCompatActivity
         subs=new HashMap<>();
         String result = readFromFireStore();
         Log.d(TAG,result);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //set data for dashboard
+        populateDashBoard();
 
+    }
+
+    public  void populateDashBoard()
+    {
+        ArrayList<CardItem> cardItems=new ArrayList<>();
+        sharedPreferences= MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+        String allSubjects=sharedPreferences.getString("subject_list","empty_list");
+        Log.d("all_subjects", allSubjects);
+        String [] sub_id=allSubjects.split(",");
+//        cardItems.add(new CardItem("AI","4th"));
+//        cardItems.add(new CardItem("ML","5th"));
+//        cardItems.add(new CardItem("DL","6th"));
+        for (String separateIdSub: sub_id)
+        {
+            String []subAndId=separateIdSub.split("_");
+            String subject=subAndId[0];
+            String semester=subAndId[1];
+            cardItems.add(new CardItem(subject,semester));
+        }
+
+        mRecyclerView=findViewById(R.id.dashboardRV);
+        mRecyclerView.setHasFixedSize(true);
+        mAdapter=new DashBoardAdapter(cardItems,this);
+        mLayoutManager=new LinearLayoutManager(this);
+
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView.setAdapter(mAdapter);
 
     }
 
@@ -174,11 +219,11 @@ public class Dashboard extends AppCompatActivity
 
         if (id == R.id.nav_home) {
             // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_notes) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_papers) {
 
-        } else if (id == R.id.nav_tools) {
+        } else if (id == R.id.nav_downloads) {
 
         } else if (id == R.id.nav_share) {
 

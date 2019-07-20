@@ -1,5 +1,6 @@
 package com.sq.mcaguide;
 
+import android.content.Context;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -41,7 +42,6 @@ public class AddSubs extends AppCompatActivity {
         rview.setHasFixedSize(true);
         db = FirebaseFirestore.getInstance();
         Query mquery;
-
         rview.setLayoutManager(new LinearLayoutManager(this));
 //      FireStore Start
 //        Handler handler = new Handler();

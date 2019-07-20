@@ -9,9 +9,9 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Dashboard</string>
-    <string name="menu_gallery">Notes</string>
-    <string name="menu_slideshow">Past Papers</string>
-    <string name="menu_tools">Downloads</string>
+    <string name="menu_notes">Notes</string>
+    <string name="menu_papers">Past Papers</string>
+    <string name="menu_downloads">Downloads</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">FeedBack</string>
 </resources>

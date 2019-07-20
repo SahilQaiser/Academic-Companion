@@ -9,17 +9,17 @@
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_notes"
             android:icon="@drawable/ic_menu_gallery"
-            android:title="@string/menu_gallery" />
+            android:title="@string/menu_notes" />
         <item
-            android:id="@+id/nav_slideshow"
+            android:id="@+id/nav_papers"
             android:icon="@drawable/ic_menu_slideshow"
-            android:title="@string/menu_slideshow" />
+            android:title="@string/menu_papers" />
         <item
-            android:id="@+id/nav_tools"
+            android:id="@+id/nav_downloads"
             android:icon="@drawable/ic_menu_manage"
-            android:title="@string/menu_tools" />
+            android:title="@string/menu_downloads" />
     </group>
 
     <item android:title="Communicate">

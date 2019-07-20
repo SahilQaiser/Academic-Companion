@@ -1,5 +1,6 @@
 package com.sq.mcaguide;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -11,13 +12,14 @@ import com.google.firestore.admin.v1beta1.Progress;
 public class MainActivity extends AppCompatActivity {
     //EditText etUsername, etPassword;
     private static final String TAG = "MainActivity";
+    public static Context context;
     //Button btnLogin;
     ProgressBar loading;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+          context=MainActivity.this;
         loading = findViewById(R.id.loadingBar);
         final Intent dashboard = new Intent(MainActivity.this,Dashboard.class);
 
