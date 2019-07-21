@@ -4,29 +4,45 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
 
-    SharedPreferences sharedPreferences;
     private StorageReference mStorageRef;
     private Context mContext;
     Intent addSub;
     private String[] mList;
-    SharedPreferences.Editor editor;
     private String[] mSem;
     private String[] mUrl;
     private static final String TAG = "SubAdapter";
     String url;
+    SharedPreferences sharedPreferences;
+    ArrayList<CardItem> subjectList;
+    boolean isDuplicate=false;
+
     public SubAdapter()
     {
 
@@ -39,59 +55,62 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
         this.mContext=context;
         //mStorageRef = FirebaseStorage.getInstance().getReference();
     }
-
-
-
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.subject_item,viewGroup,false);
         return new ViewHolder(view);
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        return super.getItemViewType(position);
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
         final String subject = mList[i];
 
-        String sem = mSem[i];
-        url = mUrl[i];
+        final String sem = mSem[i];
         final String id=subject+"_"+sem;
+        url = mUrl[i];
         viewHolder.textView.setText(subject);
         viewHolder.textView2.setText(sem);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-               Toast.makeText(v.getContext(),"Added "+subject,Toast.LENGTH_LONG).show();
+            public void onClick(View v)
+            {
 
-
-                Toast.makeText(v.getContext(),"Added "+subject,Toast.LENGTH_LONG).show();
-                sharedPreferences=MainActivity.context.getSharedPreferences("Subjects",Context.MODE_PRIVATE);
-                if(!sharedPreferences.contains("subject_list"))
-                {
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("subject_list",id);
-                    editor.commit();
-                    Log.d("subjects_", subject);
+                loadData(); // means subjectList now contains the stored list
+                isDuplicate= validation(new CardItem(subject,sem)); //check for duplication
+                Log.d("dup_", ""+isDuplicate);
+                if(isDuplicate)
+                {   // duplicate, show toast msg and don't add it
+                    Toast.makeText(v.getContext(),subject+"\n"+sem+"\n"+"already added",Toast.LENGTH_LONG).show();
                 }
                 else
-                {
-                    String preSubjects= sharedPreferences.getString("subject_list",null);
-                    preSubjects=preSubjects+","+id;
-                    SharedPreferences.Editor editor=sharedPreferences.edit();
-                    editor.putString("subject_list",preSubjects);
-                    editor.commit();
-                    Log.d("subjects_", preSubjects);
-
+                {   // not duplicate, so add it
+                    subjectList.add(new CardItem(subject,sem));
+                    Toast.makeText(v.getContext(),"Added "+subject,Toast.LENGTH_LONG).show();
                 }
-                ((Activity)mContext).finish();
+                saveData();
 
+                ((Activity)mContext).finish();
             }
         });
+    }
+
+    private boolean validation(CardItem cardItem)
+    {
+        boolean isFound = false;
+        for(CardItem item:subjectList)
+        {
+            if(item.getSubjectName().equals(cardItem.getSubjectName()) && item.getSemName().equals(cardItem.getSemName()))
+            {
+                isFound=true;
+                break;
+            }
+            else
+            {
+                isFound=false;
+            }
+        }
+        return isFound;
     }
 
     @Override
@@ -109,4 +128,26 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
             //btn_dl = itemView.findViewById(R.id.btnDL);
         }
     }
+
+    private void saveData() {
+        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(subjectList);
+        editor.putString("subject_list", json);
+        editor.apply();
+    }
+
+    private void loadData() {
+        SharedPreferences sharedPreferences =  MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("subject_list", null);
+        Type type = new TypeToken<ArrayList<CardItem>>() {}.getType();
+        subjectList = gson.fromJson(json, type);
+
+        if (subjectList == null) {
+            subjectList = new ArrayList<>();
+        }
+    }
+
 }

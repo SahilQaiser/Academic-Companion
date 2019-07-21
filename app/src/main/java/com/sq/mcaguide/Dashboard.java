@@ -27,7 +27,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +38,6 @@ import java.util.Map;
 public class Dashboard extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     int time=0;
-    public static SharedPreferences sharedPreferences;
     private static final String TAG="Dashboard";
     FirebaseFirestore db;
     ArrayList<String> subjectList;
@@ -51,6 +53,7 @@ public class Dashboard extends AppCompatActivity
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager mLayoutManager;
     Context context;
+    ArrayList<CardItem> subjectsInSF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,38 +102,37 @@ public class Dashboard extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         //set data for dashboard
-        populateDashBoard();
-
+        loadDataAndShowInDashBoard();
     }
 
-    public  void populateDashBoard()
-    {
-        ArrayList<CardItem> cardItems=new ArrayList<>();
-        sharedPreferences= MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
-        String allSubjects=sharedPreferences.getString("subject_list","empty_list");
-        Log.d("all_subjects", allSubjects);
-        String [] sub_id=allSubjects.split(",");
-//        cardItems.add(new CardItem("AI","4th"));
-//        cardItems.add(new CardItem("ML","5th"));
-//        cardItems.add(new CardItem("DL","6th"));
-        for (String separateIdSub: sub_id)
-        {
-            String []subAndId=separateIdSub.split("_");
-            String subject=subAndId[0];
-            String semester=subAndId[1];
-            cardItems.add(new CardItem(subject,semester));
-        }
+    private void saveData() {
+        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(subjectList);
+        editor.putString("subject_list", json);
+        editor.apply();
+    }
 
-        mRecyclerView=findViewById(R.id.dashboardRV);
+    private void loadDataAndShowInDashBoard() {
+        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = sharedPreferences.getString("subject_list", null);
+        Type type = new TypeToken<ArrayList<CardItem>>() {}.getType();
+        subjectsInSF = gson.fromJson(json, type);
+
+        if (subjectsInSF == null) {
+            subjectsInSF = new ArrayList<>();
+        }
+        mRecyclerView=findViewById(R.id.dashBoardRV);
         mRecyclerView.setHasFixedSize(true);
-        mAdapter=new DashBoardAdapter(cardItems,this);
+        mAdapter=new DashBoardAdapter(subjectsInSF,this);
         mLayoutManager=new LinearLayoutManager(this);
 
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
     }
-
     private String readFromFireStore() {
 
 
