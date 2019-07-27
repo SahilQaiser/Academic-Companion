@@ -106,7 +106,7 @@ public class Dashboard extends AppCompatActivity
     }
 
     private void saveData() {
-        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subject", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(subjectList);
@@ -114,8 +114,9 @@ public class Dashboard extends AppCompatActivity
         editor.apply();
     }
 
-    private void loadDataAndShowInDashBoard() {
-        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+    private void loadDataAndShowInDashBoard()
+    {
+        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subject", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("subject_list", null);
         Type type = new TypeToken<ArrayList<CardItem>>() {}.getType();
@@ -222,7 +223,8 @@ public class Dashboard extends AppCompatActivity
         if (id == R.id.nav_home) {
             // Handle the camera action
         } else if (id == R.id.nav_notes) {
-
+            i = new Intent(Dashboard.this,ViewPDF.class);
+            startActivity(i);
         } else if (id == R.id.nav_papers) {
 
         } else if (id == R.id.nav_downloads) {

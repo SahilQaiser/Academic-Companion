@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_syllabus"
+        android:title="Syllabus" />
+    <item
+        android:id="@+id/menu_notes"
+        android:title="Notes" />
+    <item
+        android:id="@+id/menu_papers"
+        android:title="Previous Papers" />
+</menu>

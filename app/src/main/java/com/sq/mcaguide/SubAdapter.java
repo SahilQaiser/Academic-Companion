@@ -130,7 +130,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
     }
 
     private void saveData() {
-        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subject", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(subjectList);
@@ -139,7 +139,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
     }
 
     private void loadData() {
-        SharedPreferences sharedPreferences =  MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences =  MainActivity.context.getSharedPreferences("Subject", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("subject_list", null);
         Type type = new TypeToken<ArrayList<CardItem>>() {}.getType();

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentActivity;
@@ -12,9 +13,12 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +28,11 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
-public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.ViewHolder> {
+public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.ViewHolder>  {
     private ArrayList<CardItem> mArrayList;
     private Context context;
     private boolean delete;
+    View view;
     int pos;
 
 
@@ -59,13 +64,23 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i)
     {
         //inflate the card_item layout file
-        View v= LayoutInflater.from(parent.getContext()).inflate(R.layout.dashboard_cardview,parent,false);
-        ViewHolder evh=new ViewHolder(v);
+        view= LayoutInflater.from(parent.getContext()).inflate(R.layout.dashboard_cardview,parent,false);
+        ViewHolder evh=new ViewHolder(view);
         return evh;
     }
 
+
+    public void showPopup(View v, Context c) {
+        PopupMenu popup = new PopupMenu(c, v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.sub_click_menu, popup.getMenu());
+        popup.show();
+        //Intent i = new Intent(context,ViewPDF.class);
+        //startActivity(i);
+    }
+
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position)
+    public void onBindViewHolder(final ViewHolder holder, final int position)
     {
         final CardItem currentItem=mArrayList.get(position);
 
@@ -81,6 +96,10 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,"You selected "+currentItem.getSubjectName()+"\n"+currentItem.getSemName(),Toast.LENGTH_LONG).show();
+                //Custom menu
+                //View v=views.get(position);
+                showPopup(v,context);
+
             }
         });
 
@@ -137,7 +156,7 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
     }
 
     private void saveData(ArrayList<CardItem> list) {
-        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subjects", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subject", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         Gson gson = new Gson();
         String json = gson.toJson(list);
