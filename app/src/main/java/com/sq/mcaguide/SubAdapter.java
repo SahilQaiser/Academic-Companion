@@ -36,9 +36,9 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
     Intent addSub;
     private String[] mList;
     private String[] mSem;
-    private String[] mUrl;
+    private String[] mID;
     private static final String TAG = "SubAdapter";
-    String url;
+    String sid;
     SharedPreferences sharedPreferences;
     ArrayList<CardItem> subjectList;
     boolean isDuplicate=false;
@@ -47,11 +47,11 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
     {
 
     }
-    public SubAdapter(Context context, String[] list, String[] sem, String[] uList)
+    public SubAdapter(Context context, String[] list, String[] sem, String[] uid)
     {
         this.mList=list;
         this.mSem=sem;
-        this.mUrl=uList;
+        this.mID=uid;
         this.mContext=context;
         //mStorageRef = FirebaseStorage.getInstance().getReference();
     }
@@ -68,8 +68,8 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
 
         final String sem = mSem[i];
         final String id=subject+"_"+sem;
-        url = mUrl[i];
-        Log.d("SUBADAPTER",url);
+        sid = mID[i];
+        Log.d("SUBADAPTER",sid);
         viewHolder.textView.setText(subject);
         viewHolder.textView2.setText(sem);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +78,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
             {
 
                 loadData(); // means subjectList now contains the stored list
-                isDuplicate= validation(new CardItem(subject,sem,url)); //check for duplication
+                isDuplicate= validation(new CardItem(subject,sem,sid)); //check for duplication
                 Log.d("dup_", ""+isDuplicate);
                 if(isDuplicate)
                 {   // duplicate, show toast msg and don't add it
@@ -86,7 +86,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
                 }
                 else
                 {   // not duplicate, so add it
-                    subjectList.add(new CardItem(subject,sem,url));
+                    subjectList.add(new CardItem(subject,sem,sid));
                     Toast.makeText(v.getContext(),"Added "+subject,Toast.LENGTH_LONG).show();
                 }
                 saveData();

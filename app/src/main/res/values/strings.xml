@@ -8,7 +8,7 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
-    <string name="menu_home">Dashboard</string>
+    <string name="menu_home">Syllabus</string>
     <string name="menu_notes">Notes</string>
     <string name="menu_papers">Past Papers</string>
     <string name="menu_downloads">Downloads</string>

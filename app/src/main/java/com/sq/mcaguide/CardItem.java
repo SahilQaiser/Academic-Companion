@@ -5,13 +5,13 @@ public class CardItem
 {
     private String subjectName;
     private String semName;
-    private String url;
+    private String sid;
 
-    public CardItem( String subjectName, String semName,String url)
+    public CardItem( String subjectName, String semName,String sid)
     {
         this.subjectName = subjectName;
         this.semName = semName;
-        this.url=url;
+        this.sid=sid;
     }
 
     public String getSubjectName() {
@@ -22,7 +22,7 @@ public class CardItem
         return semName;
     }
 
-    public String getUrl() {
-        return url;
+    public String getSid() {
+        return sid;
     }
 }

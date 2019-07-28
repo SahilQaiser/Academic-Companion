@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -220,7 +219,9 @@ public class Dashboard extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_home) {
+        if (id == R.id.nav_syllabus) {
+            Intent i = new Intent(Dashboard.this,SyllabusActivity.class);
+            startActivity(i);
             // Handle the camera action
         } else if (id == R.id.nav_notes) {
             i = new Intent(Dashboard.this,ViewPDF.class);

@@ -52,14 +52,14 @@ public class ViewPDF extends AppCompatActivity {
     private File downloadFile() throws IOException {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference storageRef = storage.getReferenceFromUrl("gs://academiccompanion-ae3db.appspot.com");
-        StorageReference islandRef = storageRef.child("notes/sub1_notes.pdf");
+        StorageReference islandRef = storageRef.child("AI_4.pdf");
 
         File rootPath = new File(Environment.getExternalStorageDirectory(), "file_name");
         if(!rootPath.exists()) {
             rootPath.mkdirs();
         }
 
-        final File localFile = new File(rootPath,"sub1_notes.pdf");
+        final File localFile = new File(rootPath,"AI_4.pdf");
 
         islandRef.getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
             @Override

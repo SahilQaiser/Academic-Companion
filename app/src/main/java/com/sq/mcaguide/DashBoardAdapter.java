@@ -88,11 +88,13 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
                         Intent n = new Intent(context,ViewPDF.class);
                         n.putExtra("SUBID",subID);
                         (c).startActivity(n);
-                        //Toast.makeText(c, "NOtes popup "+subID, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(c, "NOtes popup "+subID, Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.menu_syllabus:
-                        Toast.makeText(c, "Syllabus popup", Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(context,SyllabusActivity.class);
+                        (c).startActivity(i);
+                        //Toast.makeText(c, "Syllabus popup", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.menu_papers:
                         Toast.makeText(c, "Papers popup", Toast.LENGTH_SHORT).show();
@@ -112,7 +114,7 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
         //setting values to the childrens of the cardview
         final String subject=currentItem.getSubjectName();
         String semester=currentItem.getSemName();
-        final String url=currentItem.getUrl();
+        final String sid=currentItem.getSid();
         final String id=subject+"_"+semester;
         holder.subName.setText(subject);
         holder.semName.setText(semester);
@@ -121,10 +123,10 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
         holder.cardViewItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"You selected "+currentItem.getSubjectName()+"\n"+currentItem.getSemName(),Toast.LENGTH_LONG).show();
+                //Toast.makeText(context,"You selected "+sid,Toast.LENGTH_LONG).show();
                 //Custom menu
                 //View v=views.get(position);
-                showPopup(v,context,subject);
+                showPopup(v,context,sid);
 
             }
         });
