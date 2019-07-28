@@ -69,6 +69,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
         final String sem = mSem[i];
         final String id=subject+"_"+sem;
         url = mUrl[i];
+        Log.d("SUBADAPTER",url);
         viewHolder.textView.setText(subject);
         viewHolder.textView2.setText(sem);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -77,7 +78,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
             {
 
                 loadData(); // means subjectList now contains the stored list
-                isDuplicate= validation(new CardItem(subject,sem)); //check for duplication
+                isDuplicate= validation(new CardItem(subject,sem,url)); //check for duplication
                 Log.d("dup_", ""+isDuplicate);
                 if(isDuplicate)
                 {   // duplicate, show toast msg and don't add it
@@ -85,7 +86,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
                 }
                 else
                 {   // not duplicate, so add it
-                    subjectList.add(new CardItem(subject,sem));
+                    subjectList.add(new CardItem(subject,sem,url));
                     Toast.makeText(v.getContext(),"Added "+subject,Toast.LENGTH_LONG).show();
                 }
                 saveData();

@@ -70,13 +70,38 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
     }
 
 
-    public void showPopup(View v, Context c) {
+    public void showPopup(View v, final Context c, final String subID) {
         PopupMenu popup = new PopupMenu(c, v);
         MenuInflater inflater = popup.getMenuInflater();
         inflater.inflate(R.menu.sub_click_menu, popup.getMenu());
         popup.show();
-        //Intent i = new Intent(context,ViewPDF.class);
-        //startActivity(i);
+
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item)
+            {
+                int id=item.getItemId();
+
+                switch(id)
+                {
+                    case R.id.menu_notes:
+                        Intent n = new Intent(context,ViewPDF.class);
+                        n.putExtra("SUBID",subID);
+                        (c).startActivity(n);
+                        //Toast.makeText(c, "NOtes popup "+subID, Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case R.id.menu_syllabus:
+                        Toast.makeText(c, "Syllabus popup", Toast.LENGTH_SHORT).show();
+                        break;
+                    case R.id.menu_papers:
+                        Toast.makeText(c, "Papers popup", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+
+                return false;
+            }
+        });
     }
 
     @Override
@@ -85,8 +110,9 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
         final CardItem currentItem=mArrayList.get(position);
 
         //setting values to the childrens of the cardview
-        String subject=currentItem.getSubjectName();
+        final String subject=currentItem.getSubjectName();
         String semester=currentItem.getSemName();
+        final String url=currentItem.getUrl();
         final String id=subject+"_"+semester;
         holder.subName.setText(subject);
         holder.semName.setText(semester);
@@ -98,7 +124,7 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
                 Toast.makeText(context,"You selected "+currentItem.getSubjectName()+"\n"+currentItem.getSemName(),Toast.LENGTH_LONG).show();
                 //Custom menu
                 //View v=views.get(position);
-                showPopup(v,context);
+                showPopup(v,context,subject);
 
             }
         });
