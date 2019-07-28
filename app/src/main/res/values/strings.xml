@@ -14,4 +14,5 @@
     <string name="menu_downloads">Downloads</string>
     <string name="menu_share">Share</string>
     <string name="menu_send">FeedBack</string>
+    <string name="menu_results">Results</string>
 </resources>
