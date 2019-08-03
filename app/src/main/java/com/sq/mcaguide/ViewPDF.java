@@ -1,5 +1,6 @@
 package com.sq.mcaguide;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 import android.support.annotation.NonNull;
@@ -25,28 +26,58 @@ import java.net.URL;
 public class ViewPDF extends AppCompatActivity {
 
     PDFView pdfView;
+    File localFile;
     String u = "https://firebasestorage.googleapis.com/v0/b/academiccompanion-ae3db.appspot.com/o/notes%2Fsub1_notes.pdf?alt=media&token=6120b2ac-9a9b-429a-923c-de82108ce253";
     URL url;
+    String subID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pdf);
 
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras == null) {
+                subID= null;
+            } else {
+                subID= extras.getString("SUBID");
+            }
+        } else {
+            subID= (String) savedInstanceState.getSerializable("SUBID");
+        }
+        Log.d("PDFActivity",subID);
+        pdfView=findViewById(R.id.pdfView);
+        //Storage references part
         try {
-            url = new URL(u);
-        } catch (MalformedURLException e) {
+            localFile = File.createTempFile(subID, "pdf");
+            DashBoardAdapter.storageRef.child(subID).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
+                    try {
+                        displayPDF(localFile);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            });
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        pdfView=findViewById(R.id.pdfView);
+
+
+
+
         try {
-            displayPDF();
+            displayPDF(localFile);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    private void displayPDF() throws FileNotFoundException {
-        pdfView.fromAsset("app.pdf").load();
+    private void displayPDF(File file) throws FileNotFoundException {
+        //pdfView.fromAsset(name).load();
+        pdfView.fromFile(file).load();
 
     }
     private File downloadFile() throws IOException {

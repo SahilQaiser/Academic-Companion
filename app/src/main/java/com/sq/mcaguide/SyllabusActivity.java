@@ -1,5 +1,6 @@
 package com.sq.mcaguide;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,8 @@ public class SyllabusActivity extends AppCompatActivity
     ArrayList<String> semester4Subjects=new ArrayList<>();
     ArrayList<String> semester5Subjects=new ArrayList<>();
     ArrayList<String> semester6Subjects=new ArrayList<>();
+    Intent i;
+    String subID;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

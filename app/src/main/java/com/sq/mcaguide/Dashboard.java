@@ -29,6 +29,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -101,7 +102,11 @@ public class Dashboard extends AppCompatActivity
     protected void onResume() {
         super.onResume();
         //set data for dashboard
-        loadDataAndShowInDashBoard();
+        try {
+            loadDataAndShowInDashBoard();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void saveData() {
@@ -113,8 +118,7 @@ public class Dashboard extends AppCompatActivity
         editor.apply();
     }
 
-    private void loadDataAndShowInDashBoard()
-    {
+    private void loadDataAndShowInDashBoard() throws IOException {
         SharedPreferences sharedPreferences = MainActivity.context.getSharedPreferences("Subject", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = sharedPreferences.getString("subject_list", null);

@@ -22,8 +22,14 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FileDownloadTask;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.gson.Gson;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
@@ -32,6 +38,8 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
     private ArrayList<CardItem> mArrayList;
     private Context context;
     private boolean delete;
+    public static FirebaseStorage storage;
+    public static StorageReference storageRef;;
     View view;
     int pos;
 
@@ -54,10 +62,12 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
         }
     }
 
-    public DashBoardAdapter(ArrayList<CardItem> mArrayList,Context context)
-    {
+    public DashBoardAdapter(ArrayList<CardItem> mArrayList,Context context) throws IOException {
         this.mArrayList = mArrayList;
         this.context=context;
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
+
     }
 
     @Override
@@ -81,18 +91,22 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
             public boolean onMenuItemClick(MenuItem item)
             {
                 int id=item.getItemId();
-
+                //if (subID == null)
+                {
+                    String subID="AI_4.pdf";
+                }
                 switch(id)
                 {
                     case R.id.menu_notes:
                         Intent n = new Intent(context,ViewPDF.class);
                         n.putExtra("SUBID",subID);
                         (c).startActivity(n);
-                        Toast.makeText(c, "NOtes popup "+subID, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(c, "Notes popup "+subID, Toast.LENGTH_SHORT).show();
                         break;
 
                     case R.id.menu_syllabus:
                         Intent i = new Intent(context,SyllabusActivity.class);
+                        i.putExtra("SUBID",subID);
                         (c).startActivity(i);
                         //Toast.makeText(c, "Syllabus popup", Toast.LENGTH_SHORT).show();
                         break;
@@ -100,7 +114,6 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
                         Toast.makeText(c, "Papers popup", Toast.LENGTH_SHORT).show();
                         break;
                 }
-
                 return false;
             }
         });
