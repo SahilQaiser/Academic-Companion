@@ -125,6 +125,7 @@ public class Dashboard extends AppCompatActivity
         Type type = new TypeToken<ArrayList<CardItem>>() {}.getType();
         subjectsInSF = gson.fromJson(json, type);
 
+
         if (subjectsInSF == null) {
             subjectsInSF = new ArrayList<>();
         }

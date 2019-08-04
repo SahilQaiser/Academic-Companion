@@ -29,12 +29,17 @@ public class ViewPDF extends AppCompatActivity {
     File localFile;
     String u = "https://firebasestorage.googleapis.com/v0/b/academiccompanion-ae3db.appspot.com/o/notes%2Fsub1_notes.pdf?alt=media&token=6120b2ac-9a9b-429a-923c-de82108ce253";
     URL url;
+    public FirebaseStorage storage;
+    public StorageReference storageRef;;
     String subID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_pdf);
 
+
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference();
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if(extras == null) {
@@ -49,8 +54,9 @@ public class ViewPDF extends AppCompatActivity {
         pdfView=findViewById(R.id.pdfView);
         //Storage references part
         try {
-            localFile = File.createTempFile(subID, "pdf");
-            DashBoardAdapter.storageRef.child(subID).getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
+            localFile = File.createTempFile(subID, ".pdf");
+            Log.d("PDFNameSUBID",subID);
+            storageRef.child(subID+".pdf").getFile(localFile).addOnSuccessListener(new OnSuccessListener<FileDownloadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(FileDownloadTask.TaskSnapshot taskSnapshot) {
                     try {

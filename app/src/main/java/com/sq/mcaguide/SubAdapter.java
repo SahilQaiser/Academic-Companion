@@ -63,13 +63,13 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NonNull final ViewHolder viewHolder, final int i) {
         final String subject = mList[i];
 
         final String sem = mSem[i];
         final String id=subject+"_"+sem;
         sid = mID[i];
-        Log.d("SUBADAPTER",sid);
+        Log.d("ID_of_subject "+i,sid);
         viewHolder.textView.setText(subject);
         viewHolder.textView2.setText(sem);
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -78,16 +78,18 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
             {
 
                 loadData(); // means subjectList now contains the stored list
+                Log.d("ID_of_subject_onCLick "+i,subject+"-------"+sem+"----"+sid);
+                Log.d("ID_of_subject_onCLick "+i,Globals.getSubjectID(subject,sem));
                 isDuplicate= validation(new CardItem(subject,sem,sid)); //check for duplication
                 Log.d("dup_", ""+isDuplicate);
                 if(isDuplicate)
                 {   // duplicate, show toast msg and don't add it
-                    Toast.makeText(v.getContext(),subject+"\n"+sem+"\n"+"already added",Toast.LENGTH_LONG).show();
+                    Toast.makeText(v.getContext(),subject+"\n"+sem+"\n"+sid+"already added",Toast.LENGTH_LONG).show();
                 }
                 else
                 {   // not duplicate, so add it
                     subjectList.add(new CardItem(subject,sem,sid));
-                    Toast.makeText(v.getContext(),"Added "+subject,Toast.LENGTH_LONG).show();
+                    Toast.makeText(v.getContext(),"Added  "+subject+sid,Toast.LENGTH_LONG).show();
                 }
                 saveData();
 
@@ -101,6 +103,7 @@ public class SubAdapter extends RecyclerView.Adapter<SubAdapter.ViewHolder> {
         boolean isFound = false;
         for(CardItem item:subjectList)
         {
+            Log.d("Subject_id", ""+item.getSid());
             if(item.getSubjectName().equals(cardItem.getSubjectName()) && item.getSemName().equals(cardItem.getSemName()))
             {
                 isFound=true;

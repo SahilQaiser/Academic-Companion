@@ -42,6 +42,7 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
     public static StorageReference storageRef;;
     View view;
     int pos;
+    String sid;
 
 
     public  static  class ViewHolder extends RecyclerView.ViewHolder
@@ -86,6 +87,8 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
         inflater.inflate(R.menu.sub_click_menu, popup.getMenu());
         popup.show();
 
+
+
         popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item)
@@ -111,7 +114,10 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
                         //Toast.makeText(c, "Syllabus popup", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.menu_papers:
-                        Toast.makeText(c, "Papers popup", Toast.LENGTH_SHORT).show();
+                        Intent m = new Intent(context,ViewPDF.class);
+                        m.putExtra("SUBID",subID+"_paper");
+                        (c).startActivity(m);
+                        Toast.makeText(c, "Notes popup "+subID+"_paper", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 return false;
@@ -126,8 +132,9 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
 
         //setting values to the childrens of the cardview
         final String subject=currentItem.getSubjectName();
-        String semester=currentItem.getSemName();
-        final String sid=currentItem.getSid();
+        final String semester=currentItem.getSemName();
+//        sid=currentItem.getSid();
+        sid=Globals.getSubjectID(subject,semester);
         final String id=subject+"_"+semester;
         holder.subName.setText(subject);
         holder.semName.setText(semester);
@@ -139,7 +146,10 @@ public class DashBoardAdapter extends RecyclerView.Adapter<DashBoardAdapter.View
                 //Toast.makeText(context,"You selected "+sid,Toast.LENGTH_LONG).show();
                 //Custom menu
                 //View v=views.get(position);
-                showPopup(v,context,sid);
+                String id=Globals.getSubjectID(subject,semester);
+                Log.d("Item_sid", id);
+
+                showPopup(v,context,id);
 
             }
         });
