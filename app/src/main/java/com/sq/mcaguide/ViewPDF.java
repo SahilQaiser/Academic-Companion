@@ -27,6 +27,7 @@ public class ViewPDF extends AppCompatActivity {
 
     PDFView pdfView;
     File localFile;
+    File offlineFile;
     String u = "https://firebasestorage.googleapis.com/v0/b/academiccompanion-ae3db.appspot.com/o/notes%2Fsub1_notes.pdf?alt=media&token=6120b2ac-9a9b-429a-923c-de82108ce253";
     URL url;
     public FirebaseStorage storage;
@@ -39,6 +40,10 @@ public class ViewPDF extends AppCompatActivity {
 
 
         storage = FirebaseStorage.getInstance();
+        if(storage == null)
+        {
+            displayPDF();
+        }
         storageRef = storage.getReference();
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
@@ -62,12 +67,14 @@ public class ViewPDF extends AppCompatActivity {
                     try {
                         displayPDF(localFile);
                     } catch (FileNotFoundException e) {
+                        displayPDF();
                         e.printStackTrace();
                     }
                 }
 
             });
         } catch (IOException e) {
+            displayPDF();
             e.printStackTrace();
         }
 
@@ -77,14 +84,16 @@ public class ViewPDF extends AppCompatActivity {
         try {
             displayPDF(localFile);
         } catch (FileNotFoundException e) {
+            displayPDF();
             e.printStackTrace();
         }
     }
 
     private void displayPDF(File file) throws FileNotFoundException {
-        //pdfView.fromAsset(name).load();
         pdfView.fromFile(file).load();
-
+    }
+    private void displayPDF() {
+        pdfView.fromAsset("notes.pdf").load();
     }
     private File downloadFile() throws IOException {
         FirebaseStorage storage = FirebaseStorage.getInstance();
