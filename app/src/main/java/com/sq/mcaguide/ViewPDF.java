@@ -50,7 +50,7 @@ public class ViewPDF extends AppCompatActivity {
         } else {
             subID= (String) savedInstanceState.getSerializable("SUBID");
         }
-        Log.d("PDFActivity",subID);
+        //Log.d("PDFActivity",subID);
         pdfView=findViewById(R.id.pdfView);
         //Storage references part
         try {

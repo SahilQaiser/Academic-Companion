@@ -5,15 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".Dashboard"
-    tools:showIn="@layout/app_bar_dashboard">
+    tools:context=".studentProfile"
+    tools:showIn="@layout/activity_student_profile">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/dashBoardRV"
+    <WebView
+        android:id="@+id/webProfile"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="6dp"
-        android:background="#97BAA4"
-        tools:layout_editor_absoluteX="6dp"
-        tools:layout_editor_absoluteY="6dp" />
+        android:layout_height="match_parent" />
 </android.support.constraint.ConstraintLayout>

@@ -194,6 +194,7 @@ public class Dashboard extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+
     }
 
     @Override
@@ -237,6 +238,9 @@ public class Dashboard extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
 
+        } else if (id == R.id.nav_results) {
+            Intent i = new Intent(Dashboard.this,studentProfile.class);
+            startActivity(i);
         } else if (id == R.id.nav_send) {
 
         }

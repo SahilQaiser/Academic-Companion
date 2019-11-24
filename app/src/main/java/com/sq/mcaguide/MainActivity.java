@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.google.firestore.admin.v1beta1.Progress;
 
@@ -15,6 +16,30 @@ public class MainActivity extends AppCompatActivity {
     public static Context context;
     //Button btnLogin;
     ProgressBar loading;
+    private boolean start=false;
+    private long backPressedTime;
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        if(start)
+            finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(backPressedTime + 2000 > System.currentTimeMillis())
+        {
+            super.onBackPressed();
+            return;
+        }
+        else
+        {
+            Toast.makeText(getBaseContext(), "Press back again to Exit",Toast.LENGTH_SHORT).show();
+        }
+        backPressedTime = System.currentTimeMillis();
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
+                start=true;
                 loading.setProgress(100,true);
                 startActivity(dashboard);
             }
